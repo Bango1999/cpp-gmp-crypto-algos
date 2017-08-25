@@ -1,441 +1,41 @@
-/*
+/* 
  * File:   main.cpp
- * Author: bango & joe f
+ * Author: joseph
  *
- * Created on June 1, 2014, 9:01 PM
+ * Created on July 11, 2014, 6:35 PM
  */
 
 #include <cstdlib>
+#include <string>
 #include <iostream>
-#include <cmath>
-#include <set>
-#include <climits>
-#include <gmp.h>
+#include <math.h>
+#include <vector>
+#include <iomanip>
 
 using namespace std;
 
-    int oneDotTwelve(int a, int b, int& u , int& v){
-
-        if( b == 0 ){
-            u = 1;
-            v = 0;
-            return a;
-        }
-        if( a == 0 ){
-            u = 0;
-            v = 1;
-            return b;
-        }
-
-        int g = a;
-        u = 1;
-        int x = 0;
-        int y = b;
-        int s = 0;
-        int q = 0;
-        int t = 0;
-
-        while( y != 0 ){
-            q = g / y;
-            t = g % y;
-            s = u - q*x;
-            u = x;
-            g = y;
-            x = s;
-            y = t;
-        }
-        if ( y ==0 )
-            v = (g-a*u)/b;
-
-     //   cout << "U : " << u << "  V : " << v << endl;
-        return g;
-    }
-
-    // a = some number, b = the number of the mod or the "clock", u = aInverse, v = bInverse
-    int oneDotTwelvePositiveU(int a, int b, int& u , int& v){
-
-        if( b == 0 ){
-            u = 1;
-            v = 0;
-            return a;
-        }
-        if( a == 0 ){
-            u = 0;
-            v = 1;
-            return b;
-        }
-
-        int g = a;
-        u = 1;
-        int x = 0;
-        int y = b;
-        int s = 0;
-        int q = 0;
-        int t = 0;
-
-        while( y != 0 ){
-            q = g / y;
-            t = g % y;
-            s = u - q*x;
-            u = x;
-            g = y;
-            x = s;
-            y = t;
-        }
-        if ( y ==0 )
-            v = (g-a*u)/b;
-        cout << "U : " << u << "  V : " << v << endl;
-
-        while ( u < 0 ){
-            u = u + (b/g);
-            v = v - (a/g);
-            cout << "U : " << u << "  V : " << v << endl;
-        }
-
-      //  cout << "U : " << u << "  V : " << v << endl;
-        return g;
-    }
-
-
-    int solveCongruences(int a, int b, int c, int d){
-        int count = 0;
-        int x = a;
-        int y = c;
-        set<int> possibleSolutions;
-        pair<set<int>::iterator, bool> result;
-        result =  possibleSolutions.insert(x);
-            if(result.second != false)
-                result = possibleSolutions.insert(y);
-            else {
-                cout << "count = " << count << endl;
-                return x;
-
-            }
-       // cout << "x = " << x << " ; y = " << y << endl;
-        while(result.second != false){
-            x += b;
-            count++;
-            y += d;
-         //   cout << "x = " << x << " ; y = " << y << endl;
-            result = possibleSolutions.insert(x);
-            if(result.second != false)
-                result = possibleSolutions.insert(y);
-            else {
-                cout << "count = " << count << endl;
-                return x;
-            }
-        }
-        return y;
-
-
-
-    }
-
-    int solve3CongruencesLatest(int a, int b, int c, int d, int e, int f){
-
-        int x = a;
-        int y = c;
-        int z = e;
-        bool done = false;
-        set<int> possibleSolutions;
-        pair<set<int>::iterator, bool> result;
-
-        do{
-        result =  possibleSolutions.insert(x);
-            if(result.second != false) {
-                result = possibleSolutions.insert(y);
-                       if(result.second != false) {
-                                result = possibleSolutions.insert(z);
-                                if(result.second == false) {
-                                     if( c == z % d){
-                                            if ( a == z % b )
-                                                return z;
-                                        }
-                                }
-                        }
-                       else {
-                           //condition of y failing to insert because the value already exists
-                           if( a == y % b){
-                                   if ( e == y % f )
-                                        return y;
-                           }
-                       }
-            }
-            else {
-                //code to check that x contains a value that satisfies y and z as well
-                // variable containing the value that failed to insert: x
-                if( c == x % d){
-                    if ( e == x % f )
-                        return x;
-                }
-            }
-       // cout << "x = " << x << " ; y = " << y << endl;
-
-            x += b;
-            y += d;
-            z += f;
-            cout << "x = " << x << " ; y = " << y <<  " ; z = " << z <<endl;
-
-        }while(done == false);
-        return -1;
-    }
-
-
-
-//    int solveThreeCongruences(int a, int b, int c, int d, int e, int f){
-//
-//        int x = a;
-//        int y = c;
-//        int z = e;
-//
-//        //array[3] with values representing x, y, and its common denominator
-//        //array[3] with values representing y, z, and its common denominator
-//        //array[3] with values representing z, a, and its common denominator
-//
-//        //the first match between all 3 of them is the solution
-//
-//        int xyMatch[3], yzMatch[3], zaMatch[3];
-//        bool matchFound = false;
-//        while (!matchFound) {
-//
-//            if (x)
-//
-//
-//            if (y)
-//            if (z)
-//            x += b;
-//            if (x >= b) {
-//             x -= b;
-//            }
-//            y += d;
-//            if (y >= d) {
-//                y -= b;
-//            }
-//            z += f;
-//            if (z > f) {
-//                z -= f;
-//            }
-//
-//            //for (int i = 0; i < )
-//            matchFound = true;
-//        }
-//
-//
-//
-////        set<int> possibleSolutions;
-////        pair<set<int>::iterator, bool> result;
-////        result =  possibleSolutions.insert(x);
-////        do {
-////            if(result.second != false)
-////                result = possibleSolutions.insert(y);
-////            else
-////                return x;
-////            if(result.second != false)
-////                result = possibleSolutions.insert(z);
-////            else
-////                return x;
-////    } while(result.second != false);
-////        return y;
-//
-//    }
-
-    // returns x = g^A (mod N)
-    int squareAndMultiply(int N, int g, int A){
-        int a = g;
-        int b = 1;
-        while(A>0){
-            if( 1 == A % 2)
-                b = b * a % N;
-            a = a * a;
-            a = a % N;
-            A = A/2;
-        }
-        return b;
-
-    }
-
-    long squareAndMultiplyLong(int N, int g, int A){
-        long a = g;
-        long b = 1;
-        while(A>0){
-            if( 1 == A % 2)
-                b = b * a % N;
-            a = a * a;
-            a = a % N;
-            A = A/2;
-        }
-        return b;
-
-    }
-
-    //check the return type first
-    //number may be too large
-    int oneDotThirtyFermat(int a, int p){
-        return squareAndMultiply(p, a, p-2);
-    }
-
-    int cycleLength(int start, int clock){
-        int result = start;
-        int counter = 1;
-        //
-        //cout << result;
-        while((result != 1) && (counter < clock)) {
-            counter++;
-          //  cout << ", ";
-            result = (result * start ) % clock;
-          //  cout << result;
-            //cout << "clock:" << clock << " counter : " << counter << " result: " << result << " start : " << start <<endl;
-        }
-        //cout << "clock:" << clock << " counter : " << counter << " result: " << result <<endl;
-        //cout << endl;
-        return counter;
-    }
-
-    set<int> primitiveRoots(int clock){
-        int cycleCount = 0;
-        int rootsCount = 0;
-        set<int> roots;
-        for(int i = 2; i < clock; i++){
-            cycleCount = cycleLength(i, clock);
-            //cout << "cycleCount = " << cycleCount << "  i = " << i << endl;
-            if( cycleCount == clock-1) {
-                roots.insert(i);
-                rootsCount++;
-                cout << i << ",";
-                //cout << i << " is a primitive root of mod(" << clock << endl;
-            }
-        }
-        cout << endl;
-        cout << rootsCount << "rootsCount\n";
-        return roots;
-    }
-
-    // returns x from the equation g^x = arg (mod p)
-    int twoDotFour(int g , int P, int arg){
-
-        int x = INT_MAX;
-        int ans = 1;
-        int  i = 1;
-        int temp;
-        while( i < x ){
-            ans = ans * g;
-            temp = ans/P;
-            ans = ans - (temp*P);
-
-            if(ans == arg)
-                x = i;
-
-            i++;
-
-        }
-
-        cout << arg << " ( mod " << P << " ) = " << g<< "^" << x <<endl;
-
-        return x;
-    }
-
-    void twoDotSix(){
-
-        cout << " a = " << twoDotFour(2, 1373, 974 ) << endl;
-        cout << " sharedSecret = " << squareAndMultiply(1373, 974, 871) << endl;
-
-        cout << " B = " << squareAndMultiply(1373, 2, 871) << endl;
-
-    }
-
-    void twoDotEight(){
-        int AtotheK = squareAndMultiply(1373, 177, 877);
-        int A = squareAndMultiply(1373, 2, 947);
-        cout << " A = " << A << endl;
-        cout << " c1 = " << squareAndMultiply(1373, 2, 877) << endl;
-        //cout << " A^k = " << AtotheK << endl;
-        cout << " c2 = " << squareAndMultiply(1373, AtotheK * 583 , 1) << endl;
-        //part c
-        int x = squareAndMultiply(1373, 661, 299);
-        cout << " x = " << x << endl;
-        int xInverse, V;
-        int gcd;
-        //while(gcd != 1){
-        gcd = oneDotTwelvePositiveU(x, 1373, xInverse, V);
-        //}
-        int m = squareAndMultiply(1373, 1325*xInverse, 1);
-        cout << "m = " << m << endl;
-
-
-
-        //part d
-        int b = twoDotFour(2, 1373, 893);
-        cout << "b = " << b << endl;
-        x = squareAndMultiply(1373, 693, b);
-        gcd = oneDotTwelvePositiveU(x, 1373, xInverse, V);
-        m = squareAndMultiply(1373, 793*xInverse, 1);
-        cout << "m = " << m << endl;
-    }
-
-
-    void twoDotTen(){
-        int p = 32611;
-        //Alice
-        int m = 11111;
-        int a = 3589;
-        int u = squareAndMultiply(p, m, a);
-        //Bob
-        int b = 4037;
-        int v = squareAndMultiply(p, u, b);
-        //Alice
-        int x = twoDotFour(u, p, v);
-        cout << " x = b = " << x  << endl;
-        //next line luckily produces 27257, but I think this is not the right way to do it.
-        int w = squareAndMultiply(p, m, b);
-        cout << " w = " << w  << endl;
-        //Bob
-        int y = twoDotFour(w, p, v);
-        cout << " y = a = " << y  << endl;
-
-        int xInverse, V;
-        int gcd;
-
-        gcd = oneDotTwelvePositiveU(b, p-1, xInverse, V);
-
-        cout << " bInverse = " << xInverse  << endl;
-
-
-        gcd = oneDotTwelvePositiveU(a, p-1, xInverse, V);
-
-        cout << " aInverse = " << xInverse  << endl;
-
-
-    }
-
-    //originally found an implementation of Quick Sort at : http://www.algolist.net/Algorithms/Sorting/Quicksort
-//and then modified it to move the associated original index stored in the list[n][1] position, as well
-void quickSort(int arr[][2], int left, int right) {
+//This is an implementation of quickSort that I found on the internet.
+void quickSort(int arr[], int left, int right) {
       int i = left, j = right;
-      int tmp, tmpIndex;
-      int pivot = arr[(left + right) / 2][0];
-
+      int tmp;
+      int pivot = arr[(left + right) / 2];
+ 
       /* partition */
       while (i <= j) {
-            while (arr[i][0] < pivot)
+            while (arr[i] < pivot)
                   i++;
-            while (arr[j][0] > pivot)
+            while (arr[j] > pivot)
                   j--;
             if (i <= j) {
-
-                  tmp = arr[i][0];
-                  tmpIndex = arr[i][1];
-                  arr[i][0]= arr[j][0];
-                  arr[i][1]= arr[j][1];
-
-                  arr[j][0] = tmp;
-                  arr[j][1] = tmpIndex;
-
+                  tmp = arr[i];
+                  arr[i] = arr[j];
+                  arr[j] = tmp;
                   i++;
                   j--;
-
             }
-
-      }
+      };
+ 
+      /* recursion */
       if (left < j)
             quickSort(arr, left, j);
       if (i < right)
@@ -443,617 +43,699 @@ void quickSort(int arr[][2], int left, int right) {
 }
 
 
-    //2.17 Shank's baby step, giant step algorithm
-    //returns x from the equation g^x = h mod G
-    //solves the discrete log problem
-    int shanks(int G, int g, int h) {
-
-        //most recent change for g == h case
-//        if( g == h )
-//            return 1;
-
-    int N = cycleLength(g,G);
-    cout << "N = " << N << endl;
-    int limit = 10;
-    int n = 1 + floor(sqrt(N));
-    int list1[n][2], list2[n][2];
-    cout << "n = " << n << endl;
-
-    int gInverse, V;
-    int gcd = oneDotTwelvePositiveU(g,G,gInverse,V);
-    int u = squareAndMultiply(G,gInverse,n);
-    //cout << "u = " << u << endl;
-    int neg = 0;
-    for (int i = 0; i < n+1; i++) {
-        if (i == 0) {
-            list1[i][0] = 1;
-            list2[i][0] = h % G;
-            list1[i][1] = i;
-            list2[i][1] = i;
-        } else {
-            neg = n - (2*n);
-            int putMeIn = g;
-            //cout << "putmein = " << putMeIn << endl;
-            //for (int j = 0; j < i-1;j++) {
-              //  putMeIn = putMeIn * g;
-                //cout << "loop round " << j << " putmein = " << putMeIn << endl;
-           //}
-           putMeIn = squareAndMultiply(G,g,i);
-            list1[i][0] = putMeIn % G;
-            //cout << "putMeIn % G = " << list1[i] << endl;
-            list2[i][0] = (h * squareAndMultiply(G,u,i)) % G;
-          //  if (list1[i] == 14567) {
-           //     cout << "list2[" << i << "] = 1159";
-          //     return 0;
-          //  }// else if (list2[i] == 1159) {
-                //cout << "list1[" << i << "] = 1159" << endl;
-               //return 0;
-            list1[i][1] = i;
-            list2[i][1] = i;
-
-
-        }
-
-
+int kasiskiMethod(string encrypted){
+    int keyLength = 0;
+   // int size = (encrypted.length() / 6 );
+    int numTrigrams = 0;
+    string found[50];//make an array to hold each trigram that is found
+    //The size of this array is set to the length of the encrypted message divided by 6.
+    int difference[50];
+    int places[50][2];
+    int factors[1000];
+    int numFactors = 0;
+    
+    for(int i = 0; i < 1000; i++){
+        factors[i] = 0;
     }
-
-    quickSort(list1,0,n);
-    quickSort(list2,0,n);
-
-    int ii = 0;
-    int jj = 0;
-    while(list1[ii][0] != list2[jj][0]){
-        while(list1[ii][0] < list2[jj][0]){
-            ii++;
-        }
-        while(list1[ii][0] > list2[jj][0]){
-            jj++;
-        }
-
-
+    
+    string trigram ( encrypted, 0 , 3 );
+    string temp = "";
+    //int location = 0;
+    
+    
+    
+    for(int i = 0; i <20; i++){
+        difference[i] = 0;
+        places[i][0] = 0;
+        places[i][1] = 0;
     }
-    return (list1[ii][1]+list2[jj][1] *n);
-    }
-//
-//   int shanks(int G, int g, int h){
-//       int N = cycleLength(g,G);
-//       cout << endl << "N = " << N << endl;
-//       if(N < 2)
-//           return 0;
-//       int n = 1 + floor(sqrt(N));
-//       cout << endl << "n = " << n << endl;
-//
-//
-//
-//
-//
-//       int gInverse, V;
-//       int gcd = oneDotTwelvePositiveU(9704, 17389, gInverse, V);
-//       cout << "g^-1 : " << gInverse << endl;
-//       cout << "g^-n attempt : " << squareAndMultiply(17389, gInverse, 36) << endl;
-//   }
-
-//
-//    int* primitiveRoots(int clock){
-//        int cycleCount = 2;
-//        int rootsCount = 5;
-//        int roots[clock];
-//        for(int i = 2; i < clock; i++){
-//            //cycleCount = cycleLength(i, clock);
-//            int ans = 0;
-//            cycleCount = 2;
-//            while (cycleCount < clock+2 && ans != 1) {
-//
-//                ans = (pow(i,cycleCount));
-//                ans = ans % clock;
-//                cout << ans << endl;
-//                cycleCount++;
-//            }
-//            cout << "cycleCount = " << cycleCount-1 << endl;
-//            if( cycleCount-1 == clock) {
-//                roots[rootsCount++] = i;
-//                cout << i << " is a primitive root of mod(" << clock << endl;
-//            }
-//        }
-//
-//        roots[0] = rootsCount;
-//        cout << rootsCount << "rootsCount\n";
-//        cout << roots[0] << "roots[0]\n";
-//
-//        int * ret = roots;
-//        return ret;
-//
-//    }
-
-
-    //pass in two arrays and the number of congruences ( n ) to solve
-    // returns x = a[i] mod m[i] for n congruences
-    int solveNCongruences(int a[], int m[], int n){
-        int y;
-        int inverse;
-        int x;
-        int runningClock = m[0];
-        int v; //v is a throw away variable for the oneDotTwelvePositiveU function
-        //I should update that function to just be aInverseModP and not use V
-
-
-        //look here
-        y = a[1] - a[0]; // should this line be mod-ed so that if we get a negative number for the argument, then we can loop it back around the clock to a positive value?
-        //possible fuck up on the line above^^^
-
-
-
-        v = oneDotTwelvePositiveU(m[0], m[1], inverse, v);
-
-        // check here too
-        y = (y * inverse) % m[1];//if y is negative then the mod operator will return complete bullshit answers that will need to be modified by +/- 1
-        // need to check for negative values in all variables
-
-        if( y <0 )
-            y += m[1];//testing this fix
-
-
-        cout << "y = " << y << endl;
-
-
-        x = y*m[0] + a[0];
-        cout << "x = " << x << endl;
-        for(int i = 1; i < n-1; i++){
-            x = x % m[i+1];
-            y = a[i+1] - (x % m[i+1]);
-            runningClock = runningClock * m[i];
-             v = oneDotTwelvePositiveU(runningClock % m[i+1], m[i+1], inverse, v);
-             y = (y * inverse) % m[i+1];
-             cout << "y = " << y << endl;
-             x = y*runningClock + x;
-             cout << "x = " << x << endl;
-        }
-
-        return x;
-    }
-
-    bool check3mod4(int p){
-        int check = p % 4;
-        return check == 3;
-    }
-
-//    int clockDown(int a, int p){
-//        return a % p;
-//    }
-
-    int findRootsModP(int a[], int p[],int n){
-
-        //int bTemp;// = squareAndMultiply(p, a, (p+1/4));
-        int b[n];
-        for(int i = 1; i < n; i++){
-            if( !check3mod4( p[i] ) )
-                cout << "\n\n\n P IS NOT EQUAL TO 3 MOD 4 AND P = " << p[i] << endl << endl << endl;
-
-            a[i] = a[0] % p[i];
-            cout << " a[i] Just got built " << a[i] << endl;
-            cout << " a[i] = " << a[i] << endl;
-            cout << " p[i] = " << p[i] << endl;
-            //cout << " p[i]+1/4 = " << (float)((( p[i])+1)/4) << endl;
-
-            b[i] = squareAndMultiply(p[i], a[i], (    ( ( p[i] ) + 1 )  / 4 )    );
-            cout << " b[i] = " << b[i] << endl;
-        }
-
-        cout << "\n\n\n";
-        int tempArray[n-1];
-        for(int i = 0; i < n-1; i++){
-            tempArray[i] = b[i+1];
-            cout << " b[i] = " << tempArray[i] << endl;
-
-        }
-
-
-        int tempArray2[n-1];
-        for(int i = 0; i < n-1; i++){
-            tempArray2[i] = p[i+1];
-            cout << " p[i] = " << tempArray2[i] << endl;
-        }
-
-        int xCongruences = solveNCongruences(tempArray, tempArray2, n-1);
-
-        //if ( xCongruences )
-
-
-//        int test = squareAndMultiply(p[0], xCongruences, 2);
-//        cout << " test = " << test << endl;
-//        while(  a[0] != test ){
-//            test += p[0];
-//        }
-//        for(int i = 0; i < 20 ; i++){
-//                cout << endl << xCongruences << "is a root of " << a[0] << " mod " << p[0] << endl;
-//                xCongruences += p[0];
-//        }
-        return xCongruences;
-
-    }
-
-	bool sieve(int arr[][2], int passedArr[2], int p) {
-            //arr[0][0] holds arrayCount
-                bool badFlag = false;
-                for (int l = 3; l < (int)sqrt(p); l++) {
-                    if (passedArr[0] != l && passedArr[0]%l == 0) {
-                        //cout << passedArr[0] <<" is not prime in " << passedArr[0] << "," << passedArr[1] << endl;
-                        //cout << "because " << passedArr[0] << " % " << l << " = " << passedArr[0]%l << endl;
-                        badFlag=true;
-                        break;
-                    }
-                    if (passedArr[1] != l && passedArr[1]%l == 0) {
-                        cout << passedArr[1] <<" is not prime in " << passedArr[0] << "," << passedArr[1] << endl;
-                        cout << "because " << passedArr[1] << " % " << l << " = " << passedArr[1]%l << endl;
-                        badFlag=true;
-                        break;
+    
+    for(int location = 0; location < encrypted.length(); location++){ 
+        trigram = encrypted.substr(location,3);
+        for(int i = location + 1; i < encrypted.length(); i++){
+            temp = encrypted.substr(i,3);
+            if( trigram.compare(temp) == 0 ){
+                found[numTrigrams] = trigram;
+                places[numTrigrams][0] = i;
+                places[numTrigrams][1] = location;
+                difference[numTrigrams] = i - location;
+                
+                cout << trigram << "\t | \t" << location << " and " << i << "\t | \t" << i - location << " has the factors :  ";
+                 //The cout statement above prints out a table similar to Table 4.2 on page 206, but it is not in alphabetical order.
+                for(int j = 1; j < difference[numTrigrams]; j++){
+                    
+                    if( difference[numTrigrams] % j == 0 ){
+                        factors[numFactors] = difference[numTrigrams] / j; 
+                        cout << factors[numFactors++] << ", ";
                     }
                 }
-                if (!badFlag) {
-                    arr[1][0] = passedArr[0];
-                    arr[1][1] = passedArr[1];
-                    return true;
-                }
+                cout << endl;
+                numTrigrams++;
+            }
 
-        return false;
+                
+        }
+    
+    
+    }
+    
+//    for( int i = 0; i < numFactors;i++){
+//        cout << factors[i] << endl;
+//    }
+    
+    cout << endl << endl;
+    
+    quickSort(factors, 0, numFactors-1);
+    
+//    for( int i = 0; i < numFactors;i++){
+//        cout << factors[i] << endl;
+//    }
+    
+    int keyOccurence = 0;
+    int n = 0;
+    int i = 0;
+    int num = 0;
+    while( i < numFactors ){
+        num = 1;
+        n = factors[i];
+        while( n == factors[i] && i < numFactors ){
+            i++;
+            num++;
+        }
+        if( num > keyOccurence ){
+            keyOccurence = num;
+            keyLength = n;
+        }
+        cout << n << " occurs " << num << " times." << endl;
+    }
+    
+    cout << "The key length is " << keyLength << endl;
+    
+    return keyLength;
 }
 
-    bool decompose2Primes(int a, int p, int arr[][2], bool verbose) {
-        int arrayCount = 2;
-        bool tf,ft,sf,d = false;
-        cout << "Please wait while exhaustive prime check is completed" << endl;
-        for (int i = 3; i < p; i=i+2) {
-            //cout << (float)i/p << endl;
-            if (arrayCount >= 500) {break;}
-            for (int j = 3; ((j < p) && (i+j < p/2)); j=j+2) {
-                if (i * j == p) {
-                    arr[arrayCount][0] = i;
-                    arr[arrayCount][1] = j;
-                    arrayCount++;
+double IndCo(string s){
+    int len = s.length();
+    int n = 0;
+    int F[26];
+    double index = 0.0;
+    //initializing F to all zeros
+    for( int i = 0; i < 26; i++){
+        F[i] = 0;
+    }
+    
+    for( int i = 0; i < 26; i++){
+        for( int j = 0; j < len; j++){
+            if( ( s[j] == 'a' + i ) ||  ( s[j] == 'A' + i ) ){
+                F[i] = F[i] + 1;
+                n++;
+            }
+        }
+    }
+    
+//    for( int i = 0; i < 26; i++){
+//        cout << "F[" << i << "] = " << F[i] << endl;
+//    }
+    
+    
+    
+    for( int i = 0; i < 26; i++){
+        index = index + (F[i] * ( F[i] - 1 ) );
+    }
+    
+    //cout << "n = " << n << endl;
+    //cout << temp << " / (" << n << " * " << n -1 << ") = "; 
+    
+    index = index / (n * (n -1) );
+    
+    //cout << "temp = " << temp << endl;
+    
+    
+    return index;
+}
 
-					int passMe[2] = {i,j};
-                    if (sieve(arr, passMe, p)) {
-						//cout << "matched " << i << "*" << j << " -- Adding to array at arr[" << arrayCount << "][0 & 1] respectively" << endl;
-						arr[1][0] = i;
-						arr[1][1] = j;
+double MutIndCo(string s, string t){
+    int lenS = s.length();
+    int lenT = t.length();
+    int m = 0;
+    int n = 0;
+    
+    int Fs[26];
+    int Ft[26];
+    double index = 0.0;
+    //initializing F to all zeros
+    for( int i = 0; i < 26; i++){
+        Fs[i] = 0;
+        Ft[i] = 0;
+    }
+    
+    for( int i = 0; i < 26; i++){
+        for( int j = 0; j < lenS; j++){
+            if( ( s[j] == 'a' + i ) ||  ( s[j] == 'A' + i ) ){
+                Fs[i] = Fs[i] + 1;
+                n++;
+            }
+        }
+    }
+    
+    
+    for( int i = 0; i < 26; i++){
+        for( int j = 0; j < lenT; j++){
+            if( ( t[j] == 'a' + i ) ||  ( t[j] == 'A' + i ) ){
+                Ft[i] = Ft[i] + 1;
+                m++;
+            }
+        }
+    }
+    
+//    for( int i = 0; i < 26; i++){
+//        cout << "F[" << i << "] = " << F[i] << endl;
+//    }
+    
+    
+    
+    for( int i = 0; i < 26; i++){
+        index = index + (Fs[i] *  Ft[i] );
+    }
+    
+    //cout << "n = " << n << endl;
+    //cout << temp << " / (" << n << " * " << n -1 << ") = "; 
+    
+    index = index / (n * m );
+    
+    //cout << "temp = " << temp << endl;
+    
+    
+    return index;
+}
 
-						//uncomment if you are ONLY interested in a single pair of prime composites (arr[1][0] & arr[1][1])
-						//return true;
+
+int indexOfCoincidence(string s){
+    int numIndex = 0;
+    int keylength = 2;
+    double realAverage = 0.0;
+    double avg = 0.0;
+    string temp = "";
+    int start = 0;
+    double eachIndex = 0.0;
+    int tempKey = 0;
+    double tempAvg = 0.0;
+    
+    cout << "Key Length | Individual Indices of Coincidence \t\t |  Avg Index\n";
+    
+   // while( realAverage < 0.06 && keylength < 10 ){
+     while( keylength < 10 ){
+        keylength++;
+       
+            temp="";
+            start = 0;
+            numIndex = 0;
+            avg = 0.0;
+            cout << keylength << "\t | ";
+            while(start < keylength){
+                temp="";
+                for(int j = start; j < s.length(); j+=keylength){
+                    temp += s[j];
+                }
+                numIndex++;
+                //cout << "avg = " << avg << endl;
+                eachIndex = IndCo(temp);
+                cout  << eachIndex << ", ";
+                avg += eachIndex;
+             //  cout << "temp = " << temp << endl;
+              //  cout << "eachIndex = " << eachIndex << endl;
+                //cout << "After calling IndCo, avg = " << avg << endl;
+                start++;
+            }
+            realAverage = avg / numIndex;
+            cout << "\t\t\t | " << realAverage << endl;
+            if( realAverage > tempAvg ){
+                tempAvg = realAverage;
+                tempKey = keylength;
+            }
+            //cout << "**********************************************************\n";
+            //cout << "With a keylength of " << keylength << " the realAverage is : " << realAverage << endl;
+    }
+    
+    
+    //cout << "With a keylength of " << keylength << " the realAverage is : " << realAverage << endl;
+    
+   return tempKey; 
+}
+
+void mutualIndices(string str, const int keylength){
+    vector<string> s;
+    string sj = "";
+    
+    string temp="";
+    int start = 0;
+     while(start < keylength){
+                temp="";
+                for(int j = start; j < str.length(); j+=keylength){
+                    temp += str[j];
+                }
+             //push_back temp into s...
+                s.push_back(temp);
+                start++;
+            }
+    
+    
+//    for(int i = 0; i < s.size(); i++){
+//        cout << "s[" << i << "] = " << s[i] << endl;
+//    }
+    cout << "Blocks  | \t\t Shift Amount\n";
+    cout << "i | j | ";
+    for(int i = 0; i < 26; i++){
+        cout << "     " << i << "     ";
+    }
+    cout << endl;
+    for(int i = 0; i < keylength - 1; i++ ){
+        for(int j = i + 1; j < keylength; j++ ){
+            sj = s[j];
+            cout << i+1 << " | " << j+1 << " | ";
+            //call MutIndCo(s[i], sj )  because sigma == 0 
+            for(int sigma = 0; sigma < 26; sigma++){
+                if( sigma == 0 ){
+                    cout << MutIndCo(s[i],sj) << "  ";
+                }
+                else{
+                    for(int k = 0; k < sj.length(); k++){
+                        if( sj[k] == 'z'){
+                            sj[k] = 'a';
+                        }
+                        else{
+                            sj[k] = sj[k] + 1;
+                        }
+                    }//for(int k = 0; k < sj.length(); k++){
+                    cout << MutIndCo(s[i],sj) << "  ";
+                }
+            }//for(int sigma = 0; sigma < 26; sigma++){
+            cout << endl;
+        }//for(int j = i + 1; j <= keylength; j++ ){
+    }//for(int i = 0; i < keylength; i++ ){
+    
+    
+    return;
+}
+
+// I found this at snipplr.com.
+int gauss(
+        int N, // number of unknowns
+        float A [20] [21], // coefficients and constants
+        float r[20]
+)
+{
+//    printMatrix(N, A);
+    float multiplier, divider;
+    bool fin = false;
+ 
+    // forward substitution
+    for (int m=0; m<=N; m++)
+    {
+        for (int i=m+1; i<=N; i++)
+        {
+            multiplier = A[i][m]; // current row - root
+            divider = A[m][m]; // first row - root
+ 
+            if (divider == 0)
+            {
+                return 1;
+            }
+ 
+            for (int j=m; j<=N; j++)
+            {
+                if (i == N) 
+                {
+                    break;
+                    fin = true;
+                }
+ 
+                A[i][j] = (A[m][j] * multiplier / divider) - A[i][j];
+//                cout << "A[" << i << "][" << j << "]  = (A[" << m << "][" << j << "] * " << multiplier << " / " << divider << ") - A[" << i << "][" << j << "]" << endl;
+//                cout << "Current cell " << i << j << endl;
+//                cout << "Current set " << m << m << endl;
+//                printMatrix(N, A);
+            }
+ 
+            for (int j=m; j<=N; j++)
+            {
+                A[i-1][j] = A[i-1][j] / divider;
+            }
+ 
+            if (fin)
+                break;
+        }
+    }
+ 
+//    printMatrix(N, A);
+ 
+    // back substitution
+    float s = 0;
+    r[N-1] = A[N-1][N];
+    int y = 0;
+    for (int i = N-2; i >= 0; i--)
+    {
+        s = 0;
+        y++;
+        for (int x = 0; x < N; x++)
+        {
+            s = s + (A[i][N-1-x] * r[N-(x+1)]);
+//            cout << "A[" << i << "][" << N-1-x << "] = " << A[i][N-1-x] << " ";
+//            cout << " r[" << N-(x+1) << "] = " << r[N-(x+1)] << " " << endl;
+//            cout << "s = " << s << endl;
+ 
+            if (y == x+1) break;
+        }
+        r[i] = A[i][N] - s;
+//        cout << "r[" << i << "] = A[" << i << "][" << N << "] - " << s << " = " << r[i] << endl;
+    }
+ 
+//    for (int i = 0; i < N; i++)
+//    {
+//        cout << r[i] << endl;
+//    }
+ 
+ 
+}
+
+
+void shiftRelations(string str, const int keylength){
+    vector<string> s;
+    string sj = "";
+    // The following array "b" is an idea that I have for solving the Bi - Bj = sigma equations.
+    int b[15][3];// j = i - sigma
+    //b[i][0] will contain B_j
+    //b[i][1] will contain b_i
+    //b[i][2] will contain - sigma ( negative sigma )
+    for(int i = 0; i < 15; i++){
+        b[i][0] = 0;
+        b[i][1] = 0;
+        b[i][2] = 0;
+    }
+    int bCount = 0;
+    
+    
+    string temp="";
+    int start = 0;
+    
+    double index = 0.0;
+    
+    //this builds the S_i ' s
+     while(start < keylength){
+                temp="";
+                for(int j = start; j < str.length(); j+=keylength){
+                    temp += str[j];
+                }
+             //push_back temp into s...
+                s.push_back(temp);
+                start++;
+     }
+    
+   
+    
+   
+    cout << "i | j | Shift | MutIndCo | Shift Relation " << endl;
+    for(int i = 0; i < keylength - 1; i++ ){
+        for(int j = i + 1; j < keylength; j++ ){
+            sj = s[j];
+            //cout << i+1 << " | " << j+1 << " | ";
+            //call MutIndCo(s[i], sj )  because sigma == 0 
+            for(int sigma = 0; sigma < 26; sigma++){
+                if( sigma == 0 ){
+                    index = MutIndCo(s[i],sj);
+                }
+                else{
+                    for(int k = 0; k < sj.length(); k++){
+                        if( sj[k] == 'z'){
+                            sj[k] = 'a';
+                        }
+                        else{
+                            sj[k] = sj[k] + 1;
+                        }
+                    }//for(int k = 0; k < sj.length(); k++){
+                    index = MutIndCo(s[i],sj);
+                }
+                if( index > 0.064 ){
+                    cout << i+1 << " | " << j+1 << " |  " << sigma  << "   | " << index  << " | " << "B_" << i+1 << " - B_" << j+1 << " = " << sigma << endl;;
+                    b[bCount][0] = j+1;
+                    b[bCount][1] = i+1;
+                    b[bCount][2] = ((sigma * - 1) % 26) ;
+                    if( b[bCount][2]  < 0 )
+                        b[bCount][2] += 26;
+                    if( bCount > 14 ){
+                        cout << "\nMore equations have been made then the array can hold.  Terminating.\n";
+                        exit(1);
+                    }
+                    else{
+                        bCount++;
                     }
                 }
+            }//for(int sigma = 0; sigma < 26; sigma++){
+            //cout << endl;
+        }//for(int j = i + 1; j <= keylength; j++ ){
+    }//for(int i = 0; i < keylength; i++ ){
+    
+    //displaying the shift relation equations
+    
+    for(int i = 0; i < bCount; i++){
+       cout << b[i][0] << " = " <<  
+        b[i][1] << " + " << 
+        b[i][2] << endl;
+    }
+    
+    
+    
+    return;
+}
+
+void getKey(int shifts[], int keylength){
+    vector<string> keys;
+    string temp = "a";
+    for(int h = 0; h < 26; h++){
+        for(int i = 1; i < keylength; i++){
+            temp += "a"; 
+        }
+        keys.push_back(temp);
+        temp = "a";
+    }
+    
+    for(int i = 0; i < keylength; i++){
+        keys[0][i] = keys[0][i] + shifts[i];
+        
+    }
+
+    cout << "First possible key : " << keys[0] << endl;
+    
+    for( int i = 1; i < 26; i++){
+        for(int j = 0; j < keylength; j++){
+            
+            keys[i][j] = keys[i-1][j] + 1;
+            
+            if(keys[i][j] > 'z'){
+                keys[i][j] -= 26;
             }
-            if (verbose) {
-                if ((float)i/p > 0.999 && !d) {
-                    cout << "Done..." << endl;
-                    d = true;
-                } else if ((float)i/p > 0.25 && !sf) {
-                    cout << "75% complete..." << endl;
-                    sf = true;
-                } else if ((float)i/p > 0.15 && !ft) {
-                    cout << "50% complete..." << endl;
-                    ft = true;
-                } else if ((float)i/p > 0.08 && !tf) {
-                    cout << "25% complete..." << endl;
-                    tf = true;
-                }
-            }
+            
         }
+        cout << "The " << i << "th possible key is : " << keys[i] << endl;
+    }
+    return;
+}
 
-        arr[0][0] = arrayCount;
-        arr[0][1] = arrayCount;
-
-
-        if (arr[1][0] == 0 && arr[1][1] == 0) {
-            return false;
-        } else {
-            return true;
+void decrypt(string s, string key){
+    string temp = "";
+    
+    
+    
+    for(int i = 0; i < s.length(); i+=key.length() ){
+        for(int j = 0; j < key.length(); j++){
+            
         }
     }
+    
+}
 
 
 
-    void printComposites(int arr[][2], bool has2Primes) {
-        if (arr[0][0] == 0) {return;}
-        int count = arr[0][0];
-        if (!has2Primes) {
-            count--;
-        }
-        for (int i = 0; i < arr[0][0]; i++) {
-            //if (arr[i][0] == 2) {break;}
-            if (i == 0) {
-                cout << "This array has " << count << " values..." << endl;
-            } else if (i == 1 && has2Primes) {
-                cout << "Dual Composite Primes are " << arr[1][0] << " and " << arr[1][1] << endl;
-            } else if (i != 1) {
-                cout << arr[i][0] << " " << arr[i][1] << endl;
-            }
-        }
-        return;
+
+string BrethrenDostThouEvenDecrypt(string crypt, string key, int kl) {
+
+  string msg = "";
+  for (int i = 0; i < crypt.length(); i++) {
+    msg += "-";
+  }
+
+
+  int index = 0;
+  int keyIndex = 0;
+
+  char charHalf[26];
+  int intHalf[26];
+  charHalf[0] = 'a';
+  intHalf[0] = 0;
+
+  for (int i = 1; i < 26; i++) {
+    charHalf[i] = charHalf[i-1] + 1;
+	//cout << "charhalf[i-1] = " << charHalf[i-1] << endl;
+    intHalf[i] = intHalf[i-1] + 1;
+  }
+//for (int i = 0; i < 26; i++) cout << "charhalf["<<i<<"] = " << charHalf[i] << " and intHalf[" << i << "] = " << intHalf[i] << endl;
+//return 0;
+
+  while (index < crypt.length()) {
+
+    int match = 0;
+
+    while (key[keyIndex] != charHalf[match] && match < 26) {
+      match++;
     }
-
-
-    int rootOfAModP(int a, int p){
-        int factorsOfP[p/2][2];
-        int clockedArguments[p/2];
-        int n;
-        printComposites(factorsOfP,decompose2Primes(1, p, factorsOfP, false));
-        clockedArguments[0] = a;
-        n = factorsOfP[0][0];
-        factorsOfP[0][0] = p;
-        cout << "\n n = " << n << endl;
-        int tempArray[p/2];
-        for(int i = 0; i < n; i++){
-            tempArray[i] = factorsOfP[i][0];
-
-        }
-        int returnNumber = findRootsModP(clockedArguments, tempArray, n);
-
-        return returnNumber;
-
+	cout << "match is " << match << endl;
+    msg[index] = crypt[keyIndex] - intHalf[match];
+    
+    if (msg[index] > 'z') {
+      msg[index] = msg[index] + 26;
     }
+    index++;
+    keyIndex++;
+    if (keyIndex >= kl) keyIndex = 0;
+  }
 
-    //returns x from the equation g^x = a mod p
-    int pohligHellman(int g, int h, int p){
-        int returnNum = 0;
-        int orderOfg = cycleLength(g, p);
-        cout << "The order of g is : " << orderOfg << endl;
+  cout << "Decrypted Message As:\n" << msg << endl;
 
-        int factorsOfN[p/2][2];
-
-        printComposites(factorsOfN,decompose2Primes(1, orderOfg, factorsOfN, false));
-        int tempArray[p/2];
-        int n = factorsOfN[0][0];
-        int arrayOfg[n];
-        int arrayOfh[n];
-        int arrayOfY[n];
-        for(int i = 0; i < n; i++){
-            tempArray[i] = factorsOfN[i+1][0];
-            arrayOfg[i] = squareAndMultiply(p, g, ( orderOfg / tempArray[i] ) );
-            arrayOfh[i] = squareAndMultiply(p, h, ( orderOfg / tempArray[i] ) );
-           // arrayOfY[i] = shanks(p, arrayOfg[i], arrayOfh[i] );
-            cout << "g_" << i << " = " << arrayOfg[i] << endl;
-            cout << "y_" << i << " = " << arrayOfY[i] << endl;
-            cout << "h_" << i << " = " << arrayOfh[i] << endl;
-        }
-       // int x = solveNCongruences(arrayOfY, tempArray, n);
-
-        //cout << "\n x = " << x << endl;
-
-        return returnNum;
-    }
-
-     int threeDotOne(int e, int c, int N){
-        cout << "\tn= " << N << endl;
-        int x;
-        int g;
-        int factorsOfN[(int)N/2][2];
-        int d, V;
-        bool verbose = false;
-        //initialize all elements to 0
-        for (int i = 0; i < N/2; i++) {
-            for (int j = 0; j < 2; j++) {
-                factorsOfN[i][j] = 0;
-            }
-        }
-        //if N is very big, show the completion rate when performing exhaustive prime checks
-        if (N > 200000) {
-            verbose = true;
-        }
-        cout << "\tn= " << N << endl;
-        decompose2Primes(1, N, factorsOfN, verbose);
-        int p = factorsOfN[0][1];
-        cout << "(the count of elements in this array is ) p = " << p << endl;
-        if( factorsOfN[1][0] == 0 ){
-            p = N-1;
-        }
-        else
-        {
-            g = oneDotTwelvePositiveU((factorsOfN[1][0] - 1 ),(factorsOfN[1][1] - 1 ) , d, V);
-            p = (factorsOfN[1][0] - 1 ) * (factorsOfN[1][1] - 1 ) / g;
-
-        }
-
-
-        cout << "p = " << p << endl;
-        int temp = oneDotTwelvePositiveU(e, p, d, V);
-        cout << "d = " << d << endl;
-        cout << "c = " << c << endl;
-        cout << "N = " << N << endl;
-        long xx = squareAndMultiplyLong(N, c, d);
-
-        cout << "\n x = " << xx << endl;
-
-
-
-        return xx;
-
-    }
-
-    int getModX(int x, int mod, int e) {
-        int base = 0;
-        for (int i = 0; i < mod; i++) {
-            if ((long)(i*e)%mod == x) {
-                return i;
-            }
-
-        }
-        return -1;
-    }
-
-    long threeDotSix(int e, int N, int arr[][2], int m) {
-        //if (decompose2Primes(e,N,arr,true)) {
-            int p = arr[1][0];
-            int q = arr[1][1];
-            cout << "keys published: e = " << e << ", p = " << p << ", q = " << q << endl;
-            cout << "sender chooses message = " << m << endl;
-            long c = squareAndMultiplyLong(N,m,e);
-            cout << "encoded message = " << c << endl;
-
-            //find d
-            int d = 0;
-            int other = 0;
-            p = 1301;
-            q = N / p;
-            cout << "p = " << p << ", q = " << q << endl;
-            long p1q1 = (p-1) * (q-1);
-            int temp;
-            temp = oneDotTwelvePositiveU(e,p1q1,d,temp);
-            //d = getModX(1,N,e);
-            cout << "d = " << d << endl;
-
-            long message = squareAndMultiplyLong(N,c,d);
-            cout << "decrypted message as " << message << endl;
-
-            c = 317730;
-
-            message = squareAndMultiplyLong(N,c,d);
-            cout << "decrypted message as " << message << endl;
-
-            return message;
-
-
-       // } else {
-      //      cout << "Could not factor prime composites on threeDotSix" << endl;
-      //      return -1;
-       // }
-
-    }
-
-    long threeDotSeven(int e, int N, int arr[][2], int c) {
-        if (decompose2Primes(e,N,arr,false)) {
-            int p = arr[1][0];
-            int q = arr[1][1];
-            cout << "keys published: e = " << e << ", p = " << p << ", q = " << q << endl;
-            long p1q1 = (p-1) * (q-1);
-            int temp;
-            int d = 0;
-            temp = oneDotTwelvePositiveU(e,p1q1,d,temp);
-            //d = getModX(1,N,e);
-            cout << "d = " << d << endl;
-
-            long message = squareAndMultiplyLong(N,c,d);
-            cout << "decrypted message as " << message << endl;
-
-            return message;
-
-
-        } else {
-            cout << "Could not factor prime composites on threeDotSix" << endl;
-            return -1;
-        }
-
-    }
-
-    void clearArray(int arr[][2],int arrlen) {
-        for (int i = 0; i < arrlen; i++) {
-            arr[i][0] = arr[i][1] = 0;
-        }
-        return;
-    }
-    void printArray(int arr[][2], int arrlen) {
-        for (int i = 0; i < arrlen; i++) {
-            cout << arr[i][0] << " - " << arr[i][1] << endl;
-        }
-        return;
-    }
-
+return msg;
+}
 
 /*
- *
+ * 
  */
 int main(int argc, char** argv) {
 
-
-	int x, y = 1147;
-	int arrlen = 500;
-	int arr[arrlen][2];
-	clearArray(arr,arrlen);
-
-	//signed long int lngInt = 17;
-	//mpz_t integ;
-	//mpz_init(integ);
-
-	//mpz_set_si(integ,lngInt);
-//	cout << integ << endl;
-
-
-
-    mpz_t a,b,p;
-    mpz_inits(a,b,p,NULL);
-
-    mpz_set_str(a, "1234", 10);
-    mpz_set_str(b,"-5678", 10); //Decimal base
-
-    mpz_add(p,a,b);
-
-    cout<<"\nThe exact result is:";
-    mpz_out_str(stdout, 10, p); //Stream, numerical base, var
-    cout<<endl;
-
-    mpz_abs(p, p);
-    cout<<"The absolute value result is:";
-    mpz_out_str(stdout, 10, p);
-    cout<<endl;
-
-    cin.get();
-	return 0;
-
-    //if you want to print the array you got, run printComposites.  If you just want the array quietly, call decompose2Primes
-//    printComposites(arr,decompose2Primes(x,y,arr,false));
-
-    //example
-    //if (decompose2Primes(x,y,arr,false)) {
-    //   cout << "Calling decompose" << endl;
-    //}
-
-    //problem 2.28
-
-    //pohligHellman(5448, 6909, 11251);
-
-    //problem 3.1
-
-    cout << "\n example 3.3 \n ";
-    x = threeDotOne(1583, 4714, 7919);
-
-
-    cout << "\n problem 3.1.a \n ";
-    x = threeDotOne(19, 36, 97);
-
-
-    cout << "\n problem 3.1.b \n ";
-    x = threeDotOne(137, 428, 541);
-
-
-    cout << "\n problem 3.1.c \n ";
-    x = threeDotOne(73, 614, 1159);
-
-
-    cout << "\n problem 3.1.d \n ";
-    x = threeDotOne(751, 677, 8023);
-
-
-    cout << "\n problem 3.1.e \n ";
-   //x = threeDotOne(38993, 328047, 401227);
-    //cout << endl << squareAndMultiply(401227, x, 38993) + 401227 << endl;
-
-    cout << "\n problem 3.6 \n ";
-    int N = 2038667;
-    int e = 103;
-    int m = 1337;
-    clearArray(arr,arrlen);
-    x = threeDotSix(e,N,arr,m);
-
-    cout << "\n problem 3.7 \n ";
-    N = 12191;
-    e = 37;
-    int c = 587;
-    clearArray(arr,arrlen);
-    x = threeDotSeven(e,N,arr,c);
-
-    cout << "\n problem 3.8 \n ";
-    //long mods[8] = {352717,351520,77083921,77066212,109404161,109380612,172205490419,172204660344};
-    //threeDotEight(arr,mods);
-
-
+     cout << setprecision(4) << fixed;
+    
+    string test = "zpgdlrjlajkpylxzpyyglrjgdlrzhzqyjzqrepvmswrzyrigzhzvregkwivssaoltnliuwoldieaqewfiiykhbjowrhdogcqhkwajyaggemisrzqoqhoavlkbjofrylvpsrtgiuavmswlzgmsevwpcdmjsvjqbrnklpcfiowhvkxjbjpmfkrqthtkozrgqihbmqsbivdardymqmpbunivxmtzwqvgefjhucborvwpcdxuwftqmoowjipdsfluqmoeavljgqealrktiwvextvkrrgxani";
+   // cout << "length = " << test.length() << endl;
+    
+    
+    int keyWordLength = kasiskiMethod(test);
+    
+    
+    string s = "A bird in hand is worth two in the bush.";
+    
+    double test2 = IndCo(s);
+    
+    keyWordLength = indexOfCoincidence(test);
+    
+    cout << endl << keyWordLength << endl;
+    
+    string t = "A stitch in time saves nine.";
+    
+    test2 = MutIndCo(s,t);
+    
+    cout << "MutIndCo(s,t) = " << test2 << endl;
+    
+    
+    mutualIndices(test, 7);
+    cout << endl;
+    shiftRelations(test, 7);
+    
+//    
+//    //testing gauss function
+//    float A[20][21];
+//    float X[20];
+//    
+//    for(int i = 0; i < 20; i++){
+//        for(int j = 0; j < 21; j++){
+//            A[i][j] = 0;
+//        }
+//    }
+//    //B1 - B3 = 1
+//    A[0][0] = 1;  
+//    A[0][2] = -1; 
+//    A[0][7] = 1;
+//    
+//    //B1-B4 = 19
+//    A[1][0] = 1;  
+//    A[1][3] = -1; 
+//    A[1][7] = 19;
+//    
+//    //B1-B6 = 16
+//    A[2][0] = 1;  
+//    A[2][5] = -1; 
+//    A[2][7] = 16;
+//    
+//    //B2 - B3 = 6
+//    A[3][1] = 1;  
+//    A[3][2] = -1; 
+//    A[3][7] = 6;
+//    
+//    
+////    //B2 - B4 = 24
+////    A[4][1] = 1;  
+////    A[4][3] = -1; 
+////    A[4][11] = 24;
+////    
+//    
+////    //B3 - B4 = 18
+////    A[5][2] = 1;  
+////    A[5][3] = -1; 
+////    A[5][11] = 18;
+//    
+//    
+//    //B3 - B5 = 24
+//    A[4][2] = 1;  
+//    A[4][4] = -1; 
+//    A[4][7] = 24;
+//    
+//    
+////    //B3 - B6 = 15
+////    A[7][2] = 1;  
+////    A[7][5] = -1; 
+////    A[7][11] = 15;
+//    
+//    
+//    //B3 - B7 = 10
+//    A[5][2] = 1;  
+//    A[5][6] = -1; 
+//    A[5][7] = 10;
+//    
+//    
+//    // B_4 - B_6 = 23
+//
+//    A[6][3] = 1;  
+//    A[6][5] = -1; 
+//    A[6][7] = 23;
+//    
+////    
+////    //  B_4 - B_7 = 18
+////    A[10][3] = 1;  
+////    A[10][6] = -1; 
+////    A[10][11] = 18;
+////    
+////    
+////    // B_6 - B_7 = 21
+////    A[11][5] = 1;  
+////    A[11][6] = -1; 
+////    A[11][11] = 21;
+////    
+//    gauss(7, A, X);
+//    
+//     for (int i=0; i<7; i++) cout << X[i] << "  ";
+    
+    int offsets[7];
+    offsets[0] = 0;
+    offsets[1] = 5;
+    offsets[2] = 25;
+    offsets[3] = 7;
+    offsets[4] = 1;
+    offsets[5] = 10;
+    offsets[6] = 15;
+    
+    getKey(offsets, 7);
+    
+    
+    BrethrenDostThouEvenDecrypt(s, "dickens", 7);
+    
+    
     return 0;
 }
+
+
