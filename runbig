@@ -1,0 +1,11 @@
+#!/bin/bash
+
+g++ bignums.cpp -lgmp -o big
+
+read -p "Run (y/n)?" choice
+case "$choice" in
+  y|Y ) chmod 777 out
+	./big;;
+  n|N ) echo "done";;
+  * ) echo "invalid";;
+esac
